@@ -1,0 +1,5 @@
+{
+  "name": "Birth Card Calculator",
+  "description": "A simple and fluid app to calculate your birth card based on your birth month and day. Discover your positive, shadow, and neutral traits.",
+  "requestFramePermissions": []
+}
