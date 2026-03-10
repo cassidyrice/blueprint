@@ -16,6 +16,7 @@
             <label>Birthday: <input type="date" id="birthDate" value="1990-01-01"></label>
             <label>Target Date: <input type="date" id="targetDate" value="2026-03-09"></label>
             <button id="generateBtn">Generate Spread</button>
+            <button id="jsonBtn">Export JSON</button>
             <button id="printBtn">Print to PDF</button>
         </div>
     </div>
@@ -8899,7 +8900,26 @@ class SolarSpreadLogic {
             `).join('');
         }
 
+        function exportJson() {
+            const birthValue = document.getElementById('birthDate').value;
+            const targetValue = document.getElementById('targetDate').value;
+            if (!birthValue || !targetValue) return;
+
+            const [by, bm, bd] = birthValue.split('-').map(Number);
+            const targetDate = new Date(targetValue);
+            const result = logic.calculateFullSpread(bm, bd, by, targetDate);
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `solar_spread_${birthValue}_${targetValue}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
         document.getElementById('generateBtn').onclick = updateSpread;
+        document.getElementById('jsonBtn').onclick = exportJson;
         document.getElementById('printBtn').onclick = () => window.print();
     </script>
 </body>
