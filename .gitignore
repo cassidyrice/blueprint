@@ -1,13 +1,8 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
 
-# OS-specific files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+node_modules/
+chrome_profile_notebooklm/
+test_pypi.txt
+package-lock.json
+.vscode/
+*.log
+__pycache__/

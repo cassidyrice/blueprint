@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint Multimedia Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050510;
+            --surface-color: #1a1a2e;
+            --accent-color: #4ecca3;
+            --text-color: #e2e2e2;
+            --text-secondary: #94a3b8;
+            --gradient: linear-gradient(135deg, #4ecca3 0%, #45b293 100%);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .input-segment {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        input {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            width: 300px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background: var(--gradient);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 204, 163, 0.4);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card-panel {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.2rem;
+        }
+
+        .output-box {
+            background: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+        }
+
+        .actions-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .asset-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .asset-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .asset-card h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .generating {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BLUEPRINT DASHBOARD</h1>
+            <p class="subtitle">Multimedia Automation & Insight Engine</p>
+        </header>
+
+        <div class="input-segment">
+            <input type="text" id="birthdate" placeholder="Birthdate (MM/DD/YYYY)" value="05/20/1990">
+            <button id="calculateBtn">Calculate Spread</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card-panel">
+                <h2 class="section-title">Yearly Spread Analysis</h2>
+                <div id="blueprintResults" class="output-box">
+                    Results will appear here...
+                </div>
+            </div>
+
+            <div class="actions-panel">
+                <div class="card-panel">
+                    <h2 class="section-title">AI Studio</h2>
+                    
+                    <div class="asset-card">
+                        <h3>🎙️ Detailed Podcast</h3>
+                        <p>Generate a long-form insight session.</p>
+                        <button class="asset-btn" data-type="podcast" disabled>Create Podcast</button>
+                        <div class="status" id="podcastStatus">Not started</div>
+                    </div>
+
+                    <div class="asset-card">
+                        <h3>📊 Infographic</h3>
+                        <p>Visual representation of yearly data.</p>
+                        <button class="asset-btn" data-type="infographic" disabled>Create Map</button>
+                        <div class="status" id="infographicStatus">Not started</div>
+                    </div>
+
+                    <div class="asset-card">
+                        <h3>🎴 Slide Deck</h3>
+                        <p>Automated presentation outline.</p>
+                        <button class="asset-btn" data-type="slides" disabled>Generate Slides</button>
+                        <div class="status" id="slidesStatus">Not started</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const calcBtn = document.getElementById('calculateBtn');
+        const resultsBox = document.getElementById('blueprintResults');
+        const assetBtns = document.querySelectorAll('.asset-btn');
+        let currentBlueprintData = "";
+
+        calcBtn.addEventListener('click', async () => {
+            const birthdate = document.getElementById('birthdate').value;
+            resultsBox.textContent = "Calculating...";
+            
+            try {
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ birthdate })
+                });
+                
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+                
+                resultsBox.textContent = data.output;
+                currentBlueprintData = data.output;
+                
+                // Enable asset buttons
+                assetBtns.forEach(btn => btn.disabled = false);
+                
+            } catch (err) {
+                resultsBox.textContent = "Error: " + err.message;
+            }
+        });
+
+        assetBtns.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const type = btn.dataset.type;
+                const statusEl = document.getElementById(`${type}Status`);
+                
+                btn.disabled = true;
+                statusEl.textContent = "Connecting to NotebookLM STUDIO...";
+                statusEl.classList.add('generating');
+                
+                try {
+                    const response = await fetch('/api/generate-assets', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ blueprintData: currentBlueprintData, type })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error);
+                    
+                    statusEl.textContent = "✅ Generation Complete!";
+                    statusEl.classList.remove('generating');
+                    
+                    // Show a summary of the result in the console or a modal
+                    console.log(`NotebookLM Response for ${type}:`, data.result);
+                    alert(`${type} created successfully in NotebookLM Studio! Check your console for details.`);
+                    
+                } catch (err) {
+                    statusEl.textContent = "❌ Error: " + err.message;
+                    statusEl.classList.remove('generating');
+                    btn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

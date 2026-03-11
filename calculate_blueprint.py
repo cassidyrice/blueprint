@@ -15,6 +15,7 @@ Usage:
 import json
 import os
 import sys
+import textwrap
 from datetime import date, datetime
 
 # ---------------------------------------------------------------------------
@@ -22,8 +23,7 @@ from datetime import date, datetime
 # ---------------------------------------------------------------------------
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(SCRIPT_DIR, '..', 'card_blueprints_data.json')
-
+DATA_FILE = os.path.join(SCRIPT_DIR, 'card_blueprints_data.json')
 # Global data store
 _DATA = None
 
@@ -624,14 +624,26 @@ def format_output(result):
     ap = result["active_period"]
     nav = result["navigation_summary"]
     
-    print("=" * 60)
+    desc = get_card_descriptions()
+    weekly = get_weekly_meanings()
+    
+    print("=" * 70)
     print("CARD BLUEPRINT")
-    print("=" * 60)
+    print("=" * 70)
     
     print(f"\n--- ARCHETYPE ---")
     print(f"Birth Card:              {a['birth_card']} (Solar Value: {a['birth_card_solar_value']})")
+    bc_desc = desc.get(a['birth_card'], {})
+    if bc_desc:
+        print(f"                         {bc_desc.get('title', '')}")
+        print(textwrap.fill(bc_desc.get('core_identity', ''), width=70, initial_indent="                         ", subsequent_indent="                         "))
     print(f"                         Domain: {a['birth_card_suit_domain']}")
+    
     print(f"Planetary Ruling Card:   {a['planetary_ruling_card']}")
+    prc_desc = desc.get(a['planetary_ruling_card'], {})
+    if prc_desc:
+        print(f"                         {prc_desc.get('title', '')}")
+        print(textwrap.fill(prc_desc.get('core_identity', ''), width=70, initial_indent="                         ", subsequent_indent="                         "))
     if a['prc_secondary']:
         print(f"  (Secondary PRC):       {a['prc_secondary']}")
     print(f"Purpose:                 {a['purpose_statement']}")
@@ -651,8 +663,18 @@ def format_output(result):
         card = bc['period_cards'].get(planet, '?')
         marker = " ◄ ACTIVE" if planet == ap['planet'] else ""
         print(f"  {planet:10s} → {card}{marker}")
-    print(f"  {'Pluto':10s} → {bc.get('pluto', '?')}")
-    print(f"  {'Result':10s} → {bc.get('result', '?')}")
+        if card in weekly and planet.lower() in weekly[card]:
+            print(textwrap.fill(weekly[card][planet.lower()], width=70, initial_indent="               ", subsequent_indent="               "))
+    
+    p_card = bc.get('pluto', '?')
+    print(f"  {'Pluto':10s} → {p_card}")
+    if p_card in weekly and 'pluto' in weekly[p_card]:
+        print(textwrap.fill(weekly[p_card]['pluto'], width=70, initial_indent="               ", subsequent_indent="               "))
+        
+    r_card = bc.get('result', '?')
+    print(f"  {'Result':10s} → {r_card}")
+    if r_card in weekly and 'result' in weekly[r_card]:
+        print(textwrap.fill(weekly[r_card]['result'], width=70, initial_indent="               ", subsequent_indent="               "))
     
     print(f"\n--- PRC SPREAD ({prc['anchor']}) ---")
     if prc['grid_position']:
@@ -662,8 +684,18 @@ def format_output(result):
         card = prc['period_cards'].get(planet, '?')
         marker = " ◄ ACTIVE" if planet == ap['planet'] else ""
         print(f"  {planet:10s} → {card}{marker}")
-    print(f"  {'Pluto':10s} → {prc.get('pluto', '?')}")
-    print(f"  {'Result':10s} → {prc.get('result', '?')}")
+        if card in weekly and planet.lower() in weekly[card]:
+            print(textwrap.fill(weekly[card][planet.lower()], width=70, initial_indent="               ", subsequent_indent="               "))
+            
+    p_card_prc = prc.get('pluto', '?')
+    print(f"  {'Pluto':10s} → {p_card_prc}")
+    if p_card_prc in weekly and 'pluto' in weekly[p_card_prc]:
+        print(textwrap.fill(weekly[p_card_prc]['pluto'], width=70, initial_indent="               ", subsequent_indent="               "))
+        
+    r_card_prc = prc.get('result', '?')
+    print(f"  {'Result':10s} → {r_card_prc}")
+    if r_card_prc in weekly and 'result' in weekly[r_card_prc]:
+        print(textwrap.fill(weekly[r_card_prc]['result'], width=70, initial_indent="               ", subsequent_indent="               "))
     
     print(f"\n--- ACTIVE PERIOD ---")
     print(f"Planet:        {ap['planet']} ({ap['planet_domain']})")
@@ -675,20 +707,30 @@ def format_output(result):
     print(f"\n--- LONG RANGE ---")
     if lr["birth_card"]:
         bc_lr = lr["birth_card"]
-        print(f"BC Long Range:   {bc_lr['card']} (Cycle {bc_lr['cycle']}, Spread {bc_lr['spread_used']}, {bc_lr['planet']})")
-        print(f"  Cycle cards:   {', '.join(bc_lr['all_7_in_cycle'])}")
+        card = bc_lr['card']
+        print(f"BC Long Range:   {card} (Cycle {bc_lr['cycle']}, Spread {bc_lr['spread_used']}, {bc_lr['planet']})")
+        if card in weekly and 'long_range' in weekly[card]:
+            print(textwrap.fill(weekly[card]['long_range'], width=70, initial_indent="                 ", subsequent_indent="                 "))
     if lr["planetary_ruling_card"]:
         prc_lr = lr["planetary_ruling_card"]
-        print(f"PRC Long Range:  {prc_lr['card']} (Cycle {prc_lr['cycle']}, Spread {prc_lr['spread_used']}, {prc_lr['planet']})")
-        print(f"  Cycle cards:   {', '.join(prc_lr['all_7_in_cycle'])}")
+        card = prc_lr['card']
+        print(f"PRC Long Range:  {card} (Cycle {prc_lr['cycle']}, Spread {prc_lr['spread_used']}, {prc_lr['planet']})")
+        if card in weekly and 'long_range' in weekly[card]:
+            print(textwrap.fill(weekly[card]['long_range'], width=70, initial_indent="                 ", subsequent_indent="                 "))
     
     ed = result["environment_displacement"]
     print(f"\n--- ENVIRONMENT & DISPLACEMENT ---")
     if ed["birth_card"]:
-        print(f"BC Environment:  {ed['birth_card']['environment']} (who moved into your house)")
+        env_card = ed['birth_card']['environment']
+        print(f"BC Environment:  {env_card} (who moved into your house)")
+        if env_card in weekly and 'environment' in weekly[env_card]:
+             print(textwrap.fill(weekly[env_card]['environment'], width=70, initial_indent="                 ", subsequent_indent="                 "))
         print(f"BC Displacement: {ed['birth_card']['displacement']} (landlord where you moved)")
     if ed["planetary_ruling_card"]:
-        print(f"PRC Environment: {ed['planetary_ruling_card']['environment']}")
+        env_card = ed['planetary_ruling_card']['environment']
+        print(f"PRC Environment: {env_card}")
+        if env_card in weekly and 'environment' in weekly[env_card]:
+             print(textwrap.fill(weekly[env_card]['environment'], width=70, initial_indent="                 ", subsequent_indent="                 "))
         print(f"PRC Displacement:{ed['planetary_ruling_card']['displacement']}")
     
     karma = result["lifetime_karma"]
@@ -704,7 +746,7 @@ def format_output(result):
     print(f"BC Formula:    {nav['bc_formula']}")
     print(f"PRC Formula:   {nav['prc_formula']}")
     print(f"All 14 Cards:  {', '.join(sorted(nav['all_14_cards']))}")
-    print("=" * 60)
+    print("=" * 70)
 
 
 if __name__ == "__main__":
