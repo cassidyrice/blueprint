@@ -24,7 +24,14 @@ app.post('/api/calculate', (req, res) => {
     // The Python script expects MM/DD/YYYY
     
     const scriptPath = path.join(__dirname, 'calculate_blueprint.py');
-    const pythonCmd = `python "${scriptPath}" --birthdate "${birthdate}"`;
+    
+    // The Python script expects: calculate_blueprint.py <month> <day> <year>
+    const dateParts = birthdate.split('/');
+    if (dateParts.length !== 3) {
+        return res.status(400).json({ error: 'Invalid date format. Use MM/DD/YYYY' });
+    }
+    const [month, day, year] = dateParts;
+    const pythonCmd = `python "${scriptPath}" ${month} ${day} ${year}`;
 
     exec(pythonCmd, (error, stdout, stderr) => {
         if (error) {
