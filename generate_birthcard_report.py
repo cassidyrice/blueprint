@@ -532,43 +532,38 @@ def generate_report_markdown(result):
     now_str = datetime.now().strftime("%B %d, %Y")
 
     md = []
-    md.append(f"# The Blueprint Report: {archetype['birth_card']}")
-    md.append(f"**Report for {timing['birth_date']}** | *Created {now_str}*")
+    md.append(f"# THE BLUEPRINT STRATEGY: {archetype['birth_card']}")
+    md.append(f"**Target:** {timing['birth_date']} | **Generated:** {now_str}")
     md.append("\n---\n")
-    md.append(f"> \"Your soul chose the signature of the {archetype['birth_card']} to navigate this lifetime—a pattern of {archetype['birth_card_suit_domain'].lower()}.\"")
+    md.append(f"## I. THE ARCHETYPAL SIGNATURE")
+    md.append(f"> \"{bc_desc.get('gw', 'Your path is unique.')}\"")
+    md.append("\n")
+    md.append(f"### **The Primary: {archetype['birth_card']}**")
+    md.append(f"**The {bc_desc.get('t', 'Archetype')}**")
+    md.append(f"{bc_desc.get('id', 'Your core pattern of identity.')}")
+    md.append("\n")
+    md.append(f"### **The Perception: {archetype['planetary_ruling_card']}**")
+    md.append(f"**The {prc_desc.get('t', 'Social Pattern')}**")
+    md.append(f"While the {archetype['birth_card']} is your internal engine, you are perceived through the {archetype['planetary_ruling_card']}. This is your strategic mask.")
     md.append("\n")
 
-    md.append("## I. Core Identity")
-    md.append(f"### **Birth Card: {archetype['birth_card']}**")
-    md.append(f"**{bc_desc.get('t', 'Archetype')}**")
-    md.append(f"{bc_desc.get('id', '')}")
+    md.append("## II. THE SOUL TENSION: KARMA PAIR")
+    md.append("Every life is a strategic negotiation between friction and support.")
     md.append("\n")
-    md.append(f"### **Planetary Ruler: {archetype['planetary_ruling_card']}**")
-    md.append(f"**{prc_desc.get('t', 'Planetary Ruler')}**")
-    md.append(f"While the {archetype['birth_card']} is your internal engine, others experience you through the lens of the {archetype['planetary_ruling_card']}. This is your professional and social \"ruling\" presence.")
-    md.append("\n")
-
-    md.append("## II. The Karma Pair")
-    md.append("Every lifetime has a specific tension—a challenge card and a supporting strength. This is your permanent \"Soul Blueprint.\"")
-    md.append("\n")
-    md.append(f"| Position | Card | Function |")
+    md.append(f"| Position | Card | Strategy |")
     md.append(f"| :--- | :--- | :--- |")
-    md.append(f"| **Challenge** | {karma['birth_card']['challenge']} | Where you encounter friction and growth. |")
-    md.append(f"| **Support** | {karma['birth_card']['supporting']} | Natural talent you can lean on. |")
-    md.append("\n")
-
-    md.append("## III. The Life Path")
-    md.append(f"**The Gateway:** {bc_desc.get('gw', 'Your path is unique.')}")
+    md.append(f"| **The Friction (Challenge)** | {karma['birth_card']['challenge']} | The obstacle that refines your power. |")
+    md.append(f"| **The Support (Gift)** | {karma['birth_card']['supporting']} | The innate resource used to overcome. |")
     md.append("\n")
 
     md.append("---")
-    md.append(f"## IV. Yearly Cycle: Age {timing['age']}")
-    md.append(f"You are currently in **Spread Year {timing['spread_year']}**. This cycle defines the people, events, and psychological environment from your last birthday to your next.")
+    md.append(f"## III. THE TEMPORAL CYCLE (Age {timing['age']})")
+    md.append(f"You are currently navigating **Spread Year {timing['spread_year']}**.")
     md.append("\n")
     
-    md.append("### The Yearly Spread Grid")
+    md.append("### **The Yearly Spread Grid**")
     grid = calculate_blueprint._DATA['yearly_spreads'][str(timing['spread_year'])]['grid']
-    col_labels = ["Neptune", "Uranus", "Saturn", "Jupiter", "Mars", "Venus", "Mercury"]
+    col_labels = ["Nepture", "Uranus", "Saturn", "Jupiter", "Mars", "Venus", "Mercury"]
     row_labels = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
     
     header = "| | " + " | ".join(col_labels) + " |"
@@ -576,59 +571,55 @@ def generate_report_markdown(result):
     md.append(header)
     md.append(sep)
     for r in range(7):
-        row = grid[r*7 : (r+1)*7]
-        line = f"| **{row_labels[r]}** | " + " | ".join(row) + " |"
+        grid_row = grid[r*7 : (r+1)*7]
+        line = f"| **{row_labels[r]}** | " + " | ".join(grid_row) + " |"
         md.append(line)
     md.append("\n")
     
-    md.append(f"**Crown Line:** {', '.join(timing['crown_line'])}")
+    md.append(f"**The Crown Line (Current Command):** {', '.join(timing['crown_line'])}")
     md.append("\n")
 
-    md.append("### Current Temporal Influence")
-    md.append(f"You are currently in your **{active['planet']}** period.")
-    md.append(f"- **Internal Influence ({active['planet']}):** {active['birth_card_active']} (How you feel)")
-    md.append(f"- **External Influence ({active['planet']}):** {active['prc_active']} (How events show up)")
+    md.append("### **Current Field of Influence**")
+    md.append(f"Operating Period: **{active['planet']}**")
+    md.append(f"- **Psychological Orientation:** {active['birth_card_active']} (The internal state)")
+    md.append(f"- **Environmental Manifestation:** {active['prc_active']} (The situational impact)")
     md.append("\n")
 
-    md.append("### Key Yearly Locations")
-    md.append(f"- **Environment (Home Base):** {env_disp['birth_card']['environment']}")
-    md.append(f"- **Displacement (Where you moved):** {env_disp['birth_card']['displacement']}")
-    md.append(f"- **Long Range (Yearly Theme):** {lr['birth_card']['card']}")
+    md.append("### **Strategic Markers**")
+    md.append(f"- **The Long Range (Yearly Theme):** {lr['birth_card']['card']}")
+    md.append(f"- **The Home Base (Environment):** {env_disp['birth_card']['environment']}")
+    md.append(f"- **The Temporary Home (Displacement):** {env_disp['birth_card']['displacement']}")
     md.append("\n")
 
     md.append("---")
-    md.append("## V. Analysis & Meanings")
+    md.append("## IV. SITUATIONAL BREAKDOWN")
     
     interp_items = [
-        ("Birth Card", archetype["birth_card"], "birth_card"),
-        ("Planetary Ruler", archetype["planetary_ruling_card"], "prc"),
-        ("Long Range", lr["birth_card"]["card"] if lr["birth_card"] else None, "long_range"),
-        ("Environment", env_disp["birth_card"]["environment"] if env_disp["birth_card"] else None, "environment"),
-        ("Displacement", env_disp["birth_card"]["displacement"] if env_disp["birth_card"] else None, "displacement"),
-        ("Mercury", bc_spread["period_cards"].get("Mercury"), "mercury"),
-        ("Venus", bc_spread["period_cards"].get("Venus"), "venus"),
-        ("Mars", bc_spread["period_cards"].get("Mars"), "mars"),
-        ("Jupiter", bc_spread["period_cards"].get("Jupiter"), "jupiter"),
-        ("Saturn", bc_spread["period_cards"].get("Saturn"), "saturn"),
-        ("Uranus", bc_spread["period_cards"].get("Uranus"), "uranus"),
-        ("Neptune", bc_spread["period_cards"].get("Neptune"), "neptune"),
-        ("Pluto", bc_spread["pluto"], "pluto"),
-        ("Result", bc_spread["result"], "result"),
+        ("Long Range Theme", lr["birth_card"]["card"] if lr["birth_card"] else None, "long_range"),
+        ("Active Environmental Pressure", env_disp["birth_card"]["environment"] if env_disp["birth_card"] else None, "environment"),
+        ("Moving Dynamics", env_disp["birth_card"]["displacement"] if env_disp["birth_card"] else None, "displacement"),
+        ("Communication Dynamics (Mercury)", bc_spread["period_cards"].get("Mercury"), "mercury"),
+        ("Value Dynamics (Venus)", bc_spread["period_cards"].get("Venus"), "venus"),
+        ("Conflict/Drive (Mars)", bc_spread["period_cards"].get("Mars"), "mars"),
+        ("Opportunity/Growth (Jupiter)", bc_spread["period_cards"].get("Jupiter"), "jupiter"),
+        ("Structure/Limit (Saturn)", bc_spread["period_cards"].get("Saturn"), "saturn"),
+        ("Innovation/Disruption (Uranus)", bc_spread["period_cards"].get("Uranus"), "uranus"),
+        ("Vision/Dissolution (Neptune)", bc_spread["period_cards"].get("Neptune"), "neptune"),
+        ("Transformation (Pluto)", bc_spread["pluto"], "pluto"),
+        ("The Bottom Line (Result)", bc_spread["result"], "result"),
     ]
 
     for label, card, role_key in interp_items:
         if not card: continue
         desc = descriptions.get(card, {})
-        m = meanings.get(card, {}).get(role_key, "Meaning not available for this position.")
+        m = meanings.get(card, {}).get(role_key, "Analyze this archetype's placement in your current field.")
         
-        md.append(f"### {label}: {card}")
-        md.append(f"**{desc.get('title', '')}**")
-        md.append(f"**Meaning in Position:** {m}")
-        md.append("\n")
-        md.append(f"*Archetype Focus: {desc.get('core_identity', '')}*")
+        md.append(f"### **{label}: {card}**")
+        md.append(f"*{desc.get('t', 'Archetype Focus')}*")
+        md.append(f"**Strategy:** {m}")
         md.append("\n")
 
-    md.append("---\n*End of Report*")
+    md.append("\n---\n*The blueprint is a map, not a destiny. Master the pattern.*")
     return "\n".join(md)
 
 # ---------------------------------------------------------------------------
@@ -640,15 +631,11 @@ def generate_report(bm, bd, by, td=None):
         td = date.today()
     
     result = calc_blueprint(bm, bd, by, td)
-    report_html = generate_report_html(result)
+    report_md = generate_report_markdown(result)
+    output_name = f"Birthcard_Report_{bm}_{bd}_{by}.md"
     
-    if HAS_WEASYPRINT:
-        output_name = f"Birthcard_Report_{bm}_{bd}_{by}.pdf"
-        HTML(string=report_html).write_pdf(output_name)
-    else:
-        output_name = f"Birthcard_Report_{bm}_{bd}_{by}.html"
-        with open(output_name, "w", encoding="utf-8") as f:
-            f.write(report_html)
+    with open(output_name, "w", encoding="utf-8") as f:
+        f.write(report_md)
     
     return output_name
 

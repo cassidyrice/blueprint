@@ -52,7 +52,7 @@ def generate_svg(script: str, card: str = "A♣", duration=None) -> str:
     )
 
     client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
-    system_persona = engine.get_persona("visual_designer")
+    system_persona = engine.get_persona("svg_architect")
     full_system = f"{system_persona}\n\nTECHNICAL REFERENCE:\n{system}"
 
     # Use modern Haiku for ultra-fast, high-token SVG generation

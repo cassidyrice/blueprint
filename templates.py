@@ -52,16 +52,31 @@ def get_suit_accent(card: str) -> str:
 # Injects: {width} {height} {duration} {geometry} {suit_accent} {card}
 # ---------------------------------------------------------------------------
 
-SVG_SYSTEM_PROMPT = f"""You are a precision motion graphics designer. Minimal. Architectural. Deliberate.
-Brand: Cardology Media House — Modern Philosopher aesthetic, Robert Greene tone.
+SVG_SYSTEM_PROMPT = f"""You are a technical SVG architect. Your designs are built on structural integrity and 9:16 mobile optimization.
+Brand: Cardology Media House — Precision Engineering meets Modern Philosophy.
 
-OUTPUT RULES — absolute:
-- Output ONLY raw SVG. No markdown. No fences. No explanation.
+OUTPUT RULES — strictly enforced:
+- Output ONLY raw SVG. No explanation.
 - Root: <svg xmlns="http://www.w3.org/2000/svg" width="{{width}}" height="{{height}}" viewBox="0 0 {{width}} {{height}}">
-- All CSS inside <defs><style>...</style></defs>
-- EVERY animated element: animation-fill-mode: both;
-- ALL animation durations = EXACTLY {{duration}}s
-- animation-iteration-count: 1
+- All animation durations = EXACTLY {{duration}}s
+- EVERY element must adhere to the 9:16 vertical hierarchy.
+
+═══════════════════════════════════════
+STRUCTURAL LAYOUT (1080x1920)
+═══════════════════════════════════════
+Center Point: X=540, Y=960.
+TECHNICAL ZONE (Y=200-550): Secondary planetary data, small icons, hairline gold rule lines.
+HERO ZONE (Y=600-1300): Primary archetype geometry. Center-weighted. Maximum width 800px.
+TYPOGRAPHY ZONE (Y=1400-1600): Title/Archetype name. tracking 12px.
+SAFE ZONES: Keep content away from the bottom 320px (social overlays).
+
+═══════════════════════════════════════
+PALETTE
+═══════════════════════════════════════
+- Canvas: {COLORS["background"]} (Matte Black)
+- Hero Lines: {{suit_accent}}
+- Technical Markings: {COLORS["premium"]} (Metallic Gold)
+- Typography: {COLORS["text"]} (Snow White)
 
 ═══════════════════════════════════════
 BRAND PALETTE — use ONLY these 4 tokens
@@ -155,58 +170,71 @@ Forbidden words: {", ".join(TONE["forbidden_words"])} — never use these.
 SCRIPT_TEMPLATES = {
 
     "profile": """\
-Write an uncompromising 45-word voiceover for the {card} — {title}.
-Tone: Robert Greene. Cold, strategic, authoritative.
+Write a 45-word spoken-word voiceover for the {card} — {title}.
+{tone}
 
-Card Intelligence:
-- Core identity: {core_identity}
-- Power Resonance: {resonance_type}
-- Rank Mates: {rank_mates}
-- The Shadow: {shadow}
+Card data:
+- Who they are: {core_identity}
+- Their gift: {gifts}
+- Their challenge: {shadow}
+- Their direction: {life_direction}
 
-Narration Constraints:
-- Start with a declarative statement on their power or shadow.
-- Mention their resonance type ({resonance_type}) or a key gift.
-- Bridge into the shadow: "{shadow}".
-- End with a strategic imperative. No questions.
-- No filler. No names. No markdown.
+Structure — equal thirds:
+1. GIFT: Open on the power and natural gift this archetype carries.
+2. CHALLENGE: Name the one tension or pattern that holds them back — without dwelling.
+3. REWARD: Close on the purpose and payoff when they step fully into it.
+
+Each beat one sentence. End on possibility, not warning.
 """,
 
     "lens": """\
-Write a spoken-word voiceover for the {card} — {title} — three psychological states.
+Write a 45-word spoken-word voiceover for the {card} — {title}.
 {tone}
 
-Shadow (contracted): {under}
-Evolved (center): {sweet_spot}
-Overcompensating (inflated): {over}
+Three states:
+- Contracted: {under}
+- Evolved: {sweet_spot}
+- Inflated: {over}
 
-Structure: contraction → center → overcorrection → final statement on the evolved path.
-Each beat equal weight. Land hardest on the evolved state.
+Structure — equal thirds:
+1. CHALLENGE: The contracted pattern — brief, precise, no judgment.
+2. PURPOSE: The evolved center — where their real power lives.
+3. REWARD: What becomes possible when they operate from the sweet spot.
+
+Land hardest on the evolved state. End with forward momentum.
 """,
 
     "spread": """\
-Write a spoken-word solar spread reading voiceover.
+Write a 45-word spoken-word solar spread reading voiceover.
 {tone}
 
 Birth card: {card} — {title}: {core_identity}
 Planetary ruling card: {prc} — {prc_title}: {prc_identity}
-This year's curriculum: {life_direction}
+This year's theme: {life_direction}
 
-Structure: who they are (birth card) → how power moves through them (PRC) → what this year demands.
-Final line: the year's single imperative.
+Structure — equal thirds:
+1. GIFT: Who they are and what they carry into this year.
+2. CHALLENGE: The one friction this year asks them to move through.
+3. REWARD: What this year unlocks when they meet it fully.
+
+Final line: the year's single invitation — forward-facing, not cautionary.
 """,
 
     "marketing": """\
-Write a high-conversion social media voiceover for the {card} archetype.
+Write a 45-word spoken-word social media voiceover for the {card} archetype.
 {tone}
 
 Card: {card} — {title}
 Identity: {core_identity}
-Hook strategy: {strategy}
+Hook: {strategy}
 CTA: {cta}
 
-Structure: hook → identity bridge → call to action.
-Built to stop the scroll. No soft language.
+Structure:
+1. HOOK: Intrigue them with who this archetype is at their best.
+2. BRIDGE: Name the challenge that makes the gift meaningful.
+3. CTA: The reward waiting on the other side — then the call to action.
+
+Stop the scroll with possibility, not fear.
 """,
 }
 
