@@ -99,6 +99,13 @@ ELEMENT 7: TECHNICAL HAIRLINES
 - Four diagonal hairlines corner-to-center (opacity 0.1).
 - Stroke: {COLORS["text"]}, stroke-width 0.5px.
 
+ELEMENT 8: THE TEMPORAL CASCADE (NEW)
+- Tasteful "Solitaire Win" echo effect: A series of 7 high-precision "ghost" layers of the Hero Geometry.
+- Placement: Each ghost is offset by 4px vertically and 2px horizontally from the one before it, creating a slight "stacking" trail.
+- Stroke: {{suit_accent}}, opacity trailing from 0.12 down to 0.01.
+- Animation: Sequential fade-in (0.1s delay between layers) starting at t=4s.
+- This represents the "cascade of outcomes"—infinite results from a single blueprint.
+
 ═══════════════════════════════════════
 ANIMATION TIMING — the luxury beat
 ═══════════════════════════════════════
