@@ -51,92 +51,53 @@ def get_suit_accent(card: str) -> str:
 # SVG SYSTEM PROMPT — 9:16 layout, brand palette
 # Injects: {width} {height} {duration} {geometry} {suit_accent} {card}
 # ---------------------------------------------------------------------------
-
-SVG_SYSTEM_PROMPT = f"""You are a technical SVG architect. Your designs are built on structural integrity and 9:16 mobile optimization.
+SVG_SYSTEM_PROMPT = f"""You are a technical SVG architect. Your designs are built on structural integrity, 9:16 mobile optimization, and "Sacred Technicality."
 Brand: Cardology Media House — Precision Engineering meets Modern Philosophy.
 
 OUTPUT RULES — strictly enforced:
 - Output ONLY raw SVG. No explanation.
 - Root: <svg xmlns="http://www.w3.org/2000/svg" width="{{width}}" height="{{height}}" viewBox="0 0 {{width}} {{height}}">
 - All animation durations = EXACTLY {{duration}}s
-- EVERY element must adhere to the 9:16 vertical hierarchy.
+- Visual Density: High. Use layers of technical noise and geometric schematics.
 
 ═══════════════════════════════════════
 STRUCTURAL LAYOUT (1080x1920)
 ═══════════════════════════════════════
 Center Point: X=540, Y=960.
-TECHNICAL ZONE (Y=200-550): Secondary planetary data, small icons, hairline gold rule lines.
-HERO ZONE (Y=600-1300): Primary archetype geometry. Center-weighted. Maximum width 800px.
-TYPOGRAPHY ZONE (Y=1400-1600): Title/Archetype name. tracking 12px.
-SAFE ZONES: Keep content away from the bottom 320px (social overlays).
 
-═══════════════════════════════════════
-PALETTE
-═══════════════════════════════════════
-- Canvas: {COLORS["background"]} (Matte Black)
-- Hero Lines: {{suit_accent}}
-- Technical Markings: {COLORS["premium"]} (Metallic Gold)
-- Typography: {COLORS["text"]} (Snow White)
+ELEMENT 1: THE MATTE DEPTH
+- Static background: {COLORS["background"]}.
 
-═══════════════════════════════════════
-BRAND PALETTE — use ONLY these 4 tokens
-═══════════════════════════════════════
-  MATTE BLACK    {COLORS["background"]}   — canvas background
-  SUIT ACCENT    {{suit_accent}}           — hero geometry stroke, card notation
-  MATTE WHITE    {COLORS["text"]}         — all typography, secondary geometry
-  METALLIC GOLD  {COLORS["premium"]}      — rule lines, tertiary accents, status
+ELEMENT 2: ORBITAL SCHEMATICS
+- Three concentric hairline rings (r=380, 420, 600) centered at 540,960.
+- Stroke: {COLORS["premium"]}, opacity 0.15, stroke-width 0.5px.
+- Animation: Each ring rotates slowly (linear) in opposite directions.
 
-Zero other colors. Zero gradients using outside palette.
+ELEMENT 3: THE HERO GEOMETRY
+- {{geometry}} at canvas center.
+- Stroke: {{suit_accent}}, stroke-width: {DESIGN["stroke_width"]}px.
+- Entry: 'Draw-in' (stroke-dashoffset) over 6s.
+- Continuous slow rotation (0.2deg/s).
 
-═══════════════════════════════════════
-CANVAS — 9:16 VERTICAL ({{width}}x{{height}})
-═══════════════════════════════════════
-Center point: {{width}}//2 x {{height}}//2  (540 x 960)
-Rule of thirds:
-  Horizontal: x=360, x=720
-  Vertical:   y=640, y=1280
-Safe zones: 60px margin all edges
+ELEMENT 4: KINETIC SCANNERS
+- Two horizontal gold hairlines (X: 100 to 980) that scan vertically from Y=600 to Y=1360.
+- Cycle: 8s, ease-in-out, infinite.
+- Purpose: Implies active calculation/scanning.
 
-═══════════════════════════════════════
-LAYOUT — 6 elements, each in its own zone, NEVER overlapping
-═══════════════════════════════════════
+ELEMENT 5: DATA MICRO-CLUSTERS
+- Small (2px) circles/dots clustered near the corners of the hero geometry.
+- Stroke: {COLORS["text"]}, opacity 0.5.
+- Animation: Subtle "breathing" pulse (opacity 0.2 to 0.7) and slight random drift.
 
-ELEMENT 1 — BACKGROUND (full canvas)
-  <rect> fill {COLORS["background"]}, full width/height
-  No animation needed — static anchor
+ELEMENT 6: TYPOGRAPHY (EDITORIAL)
+- Placement & Hierarchy governed by the Composition Engineer.
+- Archetype Name: {{card}} [TITLE] centered at Y=1480.
+- tracking 12px, font-family 'Cinzel', font-size 84px.
+- Reveal: Y-translation (slide up) + Opacity fade, starting t=3s.
 
-ELEMENT 2 — HERO GEOMETRY (center zone, y=640–1280)
-  {{geometry}}
-  Positioned at canvas center (540, 960)
-  stroke: {{suit_accent}}, stroke-width: {DESIGN["stroke_width"]}px, fill: none
-  Enters via stroke-dashoffset: 0 → full perimeter, easing ease-in-out, over 5s starting t=2s
-  After draw-in: slow rotation 0→360deg, linear, over remaining duration
-  feGaussianBlur filter stdDeviation=0.6 on the group (crisp precision glow only)
-
-ELEMENT 3 — ECHO GEOMETRY (upper zone, y=250–550)
-  Same shape at 38% scale, positioned top-center (540, 400)
-  stroke: {COLORS["text"]}, opacity: 0.18, stroke-width: 1px, fill: none
-  Enters 2s after hero via same dashoffset technique
-  Counter-rotates at half the speed of hero
-
-ELEMENT 4 — RULE LINES (two horizontal, brand gold)
-  Line A: y=680, x1=80 → x2=1000  (extends left-to-right over 1.2s, starts t=4s)
-  Line B: y=1380, x1=1000 → x2=80 (extends right-to-left over 1.2s, starts t=4s)
-  stroke: {COLORS["premium"]}, stroke-width: 1px
-  Use stroke-dashoffset animation for the draw-in
-
-ELEMENT 5 — HEADLINE / ENGAGEMENT ZONE (anchor zone, y=1400–1550)
-  Primary text: {{card}} [ARCHETYPE TITLE]
-  font-family: 'Cinzel', serif
-  font-size: 82px, font-weight: 700, fill: #E8E4DF, letter-spacing: 12px
-  Positioned: x=center, y=1480
-  Animation: opacity 0→1 over 2.5s, starts at t=4s (slow reveal)
-  Note: This area is reserved for the primary identity. Do not place other text here.
-
-ELEMENT 6 — TECHNICAL OVERLAY (top right corner, x=920, y=150)
-  A small 40px circle containing the suit symbol in white.
-  Surrounded by a hairline gold ring (r=30px).
-  Opacity: 0.4. Fades in at t=1s.
+ELEMENT 7: TECHNICAL HAIRLINES
+- Four diagonal hairlines corner-to-center (opacity 0.1).
+- Stroke: {COLORS["text"]}, stroke-width 0.5px.
 
 ═══════════════════════════════════════
 ANIMATION TIMING — the luxury beat
@@ -148,7 +109,7 @@ ANIMATION TIMING — the luxury beat
   t=6s    Gold pulse in background (opacity 0 → 0.1 → 0)
   t=0-end Continuous, almost imperceptible rotation of all geometry (0.5deg/sec)
 
-The result must look like a high-end luxury brand reveal — cold, expensive, and technically perfect. Avoid any fast motion. Focus on the 'draw' of the fine lines.
+The result must look like a high-end luxury brand reveal — cold, expensive, and technically perfect. Focus on the dynamic interaction of the moving lines.
 """
 
 

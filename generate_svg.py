@@ -36,24 +36,27 @@ def generate_svg(script: str, card: str = "A♣", duration=None) -> str:
     )
 
     prompt = (
-        f"Create a precision high-luxury animated SVG for this card reading.\n\n"
+        f"Create a precision high-luxury animated SVG. Visual Density: High.\n\n"
         f"Card: {card}\n"
         f"Duration: exactly {round(duration, 2)} seconds\n"
         f"Hero geometry: {geometry}\n"
         f"Palette: matte black #0D0D0D / wine red {suit_accent} / matte white #E8E4DF / metallic gold #C5A059\n\n"
-        f"Narration (use key phrases as animated text — concise, uppercase):\n{script}\n\n"
-        f"Requirements:\n"
-        f"- Strict 4-color palette only\n"
-        f"- Elements never overlap — each in its own spatial zone\n"
-        f"- Geometric precision — clean lines, exact positioning\n"
-        f"- Slow deliberate animation timing\n"
-        f"- Hero geometry must visually reference the card number\n\n"
+        f"REQUIRED LAYERS (SACRED TECHNICALITY):\n"
+        f"1. ORBITAL SCHEMATICS: Multiple hairlines rotating at varying speeds.\n"
+        f"2. HERO GEOMETRY: {geometry} (Primary anchor).\n"
+        f"3. KINETIC SCANNERS: Horizontal scanning lines implies active calculation.\n"
+        f"4. DATA MICRO-CLUSTERS: Floating technical points/circles near geometry edges.\n"
+        f"5. COMPOSITION: Typography perfectly tracked and positioned (Cinzel/Outfit).\n\n"
+        f"All elements must move with slow, deliberate motion. No static frames.\n"
         f"Start directly with <svg"
     )
 
     client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
-    system_persona = engine.get_persona("svg_architect")
-    full_system = f"{system_persona}\n\nTECHNICAL REFERENCE:\n{system}"
+    
+    # Layered persona system: Architect for geometry + Engineer for layout/typography
+    architect = engine.get_persona("svg_architect")
+    engineer = engine.get_persona("composition_engineer")
+    full_system = f"{architect}\n\n{engineer}\n\nTECHNICAL REFERENCE:\n{system}"
 
     # Use modern Haiku for ultra-fast, high-token SVG generation
     with client.messages.stream(
