@@ -23,7 +23,7 @@ from datetime import date, datetime
 # ---------------------------------------------------------------------------
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(SCRIPT_DIR, 'card_blueprints_data.json')
+DATA_FILE = os.path.join(SCRIPT_DIR, 'card_blueprints_data.min.json')
 # Global data store
 _DATA = None
 
@@ -101,17 +101,21 @@ COL_NAMES = ["Neptune", "Uranus", "Saturn", "Jupiter", "Mars", "Venus", "Mercury
 # ---------------------------------------------------------------------------
 
 def calculate_solar_value(month, day):
-    """Formula: 55 - (2 * month + day). Wraps via +52 if <= 0."""
+    """Formula: 55 - (2 * month + day). Wraps via +52 if < 0."""
     sv = 55 - (2 * month + day)
     if sv < 0:
         sv += 52
-    # sv == 0 → Joker (Dec 31 only), left as 0
+    
+    # Dec 31 is the only day that results in SV 1. However, in some 
+    # systems Joker is 0 or 53. We explicitly return 0 for Joker.
+    if month == 12 and day == 31:
+        return 0
     return sv
 
 def get_birth_card(month, day):
     """Returns (card_notation, solar_value)"""
     sv = calculate_solar_value(month, day)
-    card = SOLAR_TO_CARD.get(sv, "Unknown")
+    card = SOLAR_TO_CARD.get(sv, "Joker")
     return card, sv
 
 def get_card_suit(card):
@@ -126,13 +130,16 @@ def get_card_suit(card):
 # ---------------------------------------------------------------------------
 
 def get_planetary_ruling_card(month, day):
-    """Lookup from the date-based reference. Returns string or list for dual-PRC dates."""
+    """Lookup from the date-based reference. Returns list for dual-PRC dates."""
     init_data()
     key = f"{month}/{day}"
     prc = get_prc_data().get(key)
     if prc is None:
         return None
-    return prc  # string or list
+    # Handle compressed pipe format: "K♣|J♦" -> ["K♣", "J♦"]
+    if isinstance(prc, str) and "|" in prc:
+        return prc.split("|")
+    return [prc] if isinstance(prc, str) else prc
 
 # ---------------------------------------------------------------------------
 # Step 3: Calculate Spread Year & Load Grid
@@ -148,9 +155,12 @@ def calculate_age(birth_month, birth_day, birth_year, target_date):
     return age
 
 def calculate_spread_year(age):
-    """Spread Year = age + 1, clamped to 0-90."""
-    sy = age + 1
-    return max(0, min(90, sy))
+    """
+    Spread Year maps to age. 
+    Age 0 = Spirit/Natural Spread (0)
+    Age 35 = Spread 35
+    """
+    return max(0, min(90, age))
 
 def load_spread(spread_year):
     """Load the 7x7 grid + crown line for a given spread year."""
@@ -166,16 +176,14 @@ def load_spread(spread_year):
 
 def find_card_in_grid(card, grid):
     """
-    Find card position in the 7x7 grid.
+    Find card position in the 1D flat grid.
     Returns (row, col) or None if not found.
-    Row 0=Mercury ... Row 6=Neptune
-    Col 0=Neptune ... Col 6=Mercury
     """
-    for r in range(7):
-        for c in range(7):
-            if grid[r][c] == card:
-                return (r, c)
-    return None
+    try:
+        idx = grid.index(card)
+        return (idx // 7, idx % 7)
+    except ValueError:
+        return None
 
 def extract_cards(card, spread, count=9):
     """
@@ -225,7 +233,7 @@ def extract_cards(card, spread, count=9):
                     crown_index = 2
                     collected.append(crown[crown_index])
                     continue
-            collected.append(grid[cur_row][cur_col])
+            collected.append(grid[cur_row * 7 + cur_col])
         else:
             crown_index -= 1
             if crown_index < 0:
@@ -233,7 +241,7 @@ def extract_cards(card, spread, count=9):
                 in_crown = False
                 cur_row = 0
                 cur_col = 6
-                collected.append(grid[cur_row][cur_col])
+                collected.append(grid[cur_row * 7 + cur_col])
                 continue
             collected.append(crown[crown_index])
     
@@ -271,7 +279,7 @@ def _extract_from_crown_start(crown_pos, crown, grid, count=9):
                     ci = 2
                     collected.append(crown[ci])
                     continue
-            collected.append(grid[cur_row][cur_col])
+            collected.append(grid[cur_row * 7 + cur_col])
     
     return collected
 
@@ -444,10 +452,12 @@ def _find_card_position(card, spread):
     grid = spread["grid"]
     crown = spread["crown"]
     
-    for r in range(7):
-        for c in range(7):
-            if grid[r][c] == card:
-                return ("grid", r, c)
+    # Grid search (flat 1D list)
+    try:
+        idx = grid.index(card)
+        return ("grid", idx // 7, idx % 7)
+    except ValueError:
+        pass
     
     for ci, cc in enumerate(crown):
         if cc == card:
@@ -458,7 +468,7 @@ def _find_card_position(card, spread):
 def _get_card_at_position(pos, spread):
     """Get the card at a given position in a spread."""
     if pos[0] == "grid":
-        return spread["grid"][pos[1]][pos[2]]
+        return spread["grid"][pos[1] * 7 + pos[2]]
     else:
         return spread["crown"][pos[1]]
 
@@ -471,7 +481,31 @@ def _format_position(pos):
         return {"type": "crown", "position": labels[pos[1]]}
 
 # ---------------------------------------------------------------------------
-# Step 8: Full Blueprint Calculation
+# Step 8: Relationship & Harmonic Context
+# ---------------------------------------------------------------------------
+
+def get_harmonic_relationships(card):
+    """
+    Identifies cards with mathematical resonance to the subject.
+    - Rank Mates: Cards of the same value (e.g., all other 8s).
+    - Suit Harmony: Cards in the same domain.
+    """
+    if card == "Joker":
+        return {"rank_mates": [], "suit_harmony": "All Patterns"}
+    
+    rank = card[:-1]
+    suit = card[-1]
+    
+    rank_mates = [c for c in SOLAR_TO_CARD.values() if c.startswith(rank) and c != card]
+    
+    return {
+        "rank_mates": rank_mates,
+        "suit_harmony": SUIT_DOMAINS.get(suit, "Unknown Pattern"),
+        "resonance_type": "Fixed" if card in ["2♦", "4♥", "9♠", "7♦", "8♣", "J♥"] else "Evolving"
+    }
+
+# ---------------------------------------------------------------------------
+# Step 9: Full Blueprint Calculation
 # ---------------------------------------------------------------------------
 
 def calculate_blueprint(birth_month, birth_day, birth_year, target_date=None):
@@ -603,6 +637,10 @@ def calculate_blueprint(birth_month, birth_day, birth_year, target_date=None):
             "day_in_personal_year": day_in_year,
             "birth_card_active": bc_active,
             "prc_active": prc_active
+        },
+        "harmony": {
+            "birth_card": get_harmonic_relationships(birth_card),
+            "planetary_ruling_card": get_harmonic_relationships(prc_primary)
         },
         "navigation_summary": {
             "all_14_cards": list(set((bc_7cards or []) + (prc_7cards or []))),

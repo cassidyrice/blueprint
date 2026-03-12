@@ -1,8 +1,42 @@
 
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Sensitive Config
+config.py
+.env
+.env.*
+birthdates.csv
+
+# Project Artifacts
+output/
+Birthcard_Report_*.md
+Birthcard_Report_*.pdf
+Birthcard_Report_*.html
+*.html
+*.mp3
+*.mp4
+*.png
+*.jpg
+*.jpeg
+*.webp
+!PROJECT_MANIFEST.md
+
+# Node / VS Code
 node_modules/
-chrome_profile_notebooklm/
-test_pypi.txt
 package-lock.json
 .vscode/
 *.log
+
+# Virtual Environment
+venv/
+.venv/
 __pycache__/
+*.py[cod]
+*$py.class
