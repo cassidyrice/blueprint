@@ -104,9 +104,9 @@ def script_profile(card: str, name: str = None, legacy: str = None) -> str:
         card=card,
         title=data["t"],
         core_identity=data["id"],
-        resonance_type=resonance,
-        rank_mates=mates,
-        shadow=data["s"]
+        gifts=data["g"],
+        shadow=data["s"],
+        life_direction=data["ld"]
     )
     return _call_claude(prompt)
 

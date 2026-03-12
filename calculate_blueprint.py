@@ -265,7 +265,7 @@ def _extract_from_crown_start(crown_pos, crown, grid, count=9):
             if ci < 0:
                 in_crown = False
                 cur_row, cur_col = 0, 6
-                collected.append(grid[cur_row][cur_col])
+                collected.append(grid[cur_row * 7 + cur_col])
                 continue
             collected.append(crown[ci])
         else:
@@ -276,6 +276,9 @@ def _extract_from_crown_start(crown_pos, crown, grid, count=9):
                 if cur_row > 6:
                     # Re-enter crown from right
                     in_crown = True
+                    ci = 3 # Crown has 3 cards (index 0,1,2), so ci=2 for right-most
+                    # But the loop immediately does ci -= 1, so we start at 3
+                    # Wait, let's just do it cleanly:
                     ci = 2
                     collected.append(crown[ci])
                     continue
