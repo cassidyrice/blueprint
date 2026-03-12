@@ -44,9 +44,10 @@ def production_package(name: str, month: int, day: int, year: int):
 
     # 3. Generate PDF Report
     print(f"\n[2/3] Crafting Premium PDF Report...")
-    report_path = os.path.join(prod_dir, f"{safe_name}_report.pdf")
-    # Note: generate_report saves internally, we move it
-    temp_report = generate_report(month, day, year) # Returns path
+    # generate_report returns the temp path, could be .pdf or .html
+    temp_report = generate_report(month, day, year) 
+    ext = os.path.splitext(temp_report)[1]
+    report_path = os.path.join(prod_dir, f"{safe_name}_report{ext}")
     shutil.move(temp_report, report_path)
     print(f"      ✓ Report forged: {report_path}")
 

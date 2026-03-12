@@ -53,9 +53,34 @@ CONTEXTS = ["profile", "lens", "spread"]
 # Birthdate helpers
 # ---------------------------------------------------------------------------
 
+def _random_birthdate() -> dict:
+    """Generate a random birthdate between 1940 and 2000."""
+    import random
+    import calendar
+    month = random.randint(1, 12)
+    max_day = calendar.monthrange(1980, month)[1]  # use non-leap ref year for day range
+    day = random.randint(1, max_day)
+    birth_year = random.randint(1940, 2000)
+    return {
+        "name": f"Unknown_{month:02d}{day:02d}{birth_year}",
+        "month": month,
+        "day": day,
+        "birth_year": birth_year,
+        "brand_association": "",
+    }
+
+
 def load_birthdates() -> list[dict]:
+    """Load from CSV, appending random entries to fill up to 100 if needed."""
+    import random
     with open(BIRTHDATES_FILE, newline="") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+
+    # Pad with random birthdates so the queue never runs dry
+    while len(rows) < 100:
+        rows.append(_random_birthdate())
+
+    return rows
 
 
 def current_spread_year(month: int, day: int, birth_year: int) -> int:

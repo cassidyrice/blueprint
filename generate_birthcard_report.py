@@ -641,12 +641,12 @@ def generate_report(bm, bd, by, td=None):
     
     result = calc_blueprint(bm, bd, by, td)
     report_html = generate_report_html(result)
-    output_name = f"Birthcard_Report_{bm}_{bd}_{by}.pdf"
     
     if HAS_WEASYPRINT:
+        output_name = f"Birthcard_Report_{bm}_{bd}_{by}.pdf"
         HTML(string=report_html).write_pdf(output_name)
     else:
-        output_name = output_name.replace(".pdf", ".html")
+        output_name = f"Birthcard_Report_{bm}_{bd}_{by}.html"
         with open(output_name, "w", encoding="utf-8") as f:
             f.write(report_html)
     
