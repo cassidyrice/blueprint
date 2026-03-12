@@ -47,24 +47,27 @@ PLANET_COLORS = {
 }
 
 # ---------------------------------------------------------------------------
+from brand_config import COLORS, FONTS, DESIGN
+
 # HTML Template Components
 # ---------------------------------------------------------------------------
 
-CSS = """
+CSS_TEMPLATE = """
 @page {
     size: letter;
     margin: 0;
 }
 
 :root {
-    --primary: #1a1c2c;
-    --accent: #d4af37;
-    --text: #2d3436;
-    --text-muted: #636e72;
-    --bg-light: #fdfdfd;
-    --border: #dfe6e9;
-    --card-red: #c0392b;
-    --card-black: #2d3436;
+    --primary: BACK_COLOR;
+    --accent: GOLD_COLOR;
+    --premium: PREM_COLOR;
+    --text: TEXT_COLOR;
+    --text-muted: #888;
+    --bg-dark: BACK_COLOR;
+    --border: #333;
+    --card-red: RED_COLOR;
+    --card-black: TEXT_COLOR;
 }
 
 * { box-sizing: border-box; }
@@ -72,7 +75,7 @@ CSS = """
 body {
     font-family: 'Georgia', serif;
     color: var(--text);
-    background: white;
+    background: var(--bg-dark);
     margin: 0;
     padding: 0;
     line-height: 1.6;
@@ -83,7 +86,7 @@ body {
     height: 11in;
     position: relative;
     page-break-after: always;
-    background: white;
+    background: var(--bg-dark);
     padding: 0.75in 0.85in;
     display: flex;
     flex-direction: column;
@@ -113,22 +116,23 @@ body {
 /* Typography - Text First */
 h1 { 
     font-family: 'Helvetica', sans-serif;
-    font-size: 32px; 
+    font-size: 38px; 
     font-weight: 800; 
-    color: var(--primary); 
+    color: var(--premium); 
     margin: 0; 
     letter-spacing: -0.5px;
+    text-transform: uppercase;
 }
 
 h2 { 
     font-family: 'Helvetica', sans-serif;
     font-size: 18px; 
     font-weight: 700; 
-    color: var(--primary); 
+    color: var(--accent); 
     margin: 30px 0 10px; 
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid var(--accent);
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--border);
     display: inline-block;
 }
 
@@ -136,7 +140,7 @@ h3 {
     font-family: 'Helvetica', sans-serif;
     font-size: 15px; 
     font-weight: 700; 
-    color: var(--primary); 
+    color: var(--text); 
     margin: 20px 0 5px;
 }
 
@@ -182,7 +186,7 @@ h3 {
     justify-content: center;
     font-weight: 800;
     font-size: 16px;
-    background: #f8f9fa;
+    background: #111;
     flex-shrink: 0;
     font-family: 'Helvetica', sans-serif;
 }
@@ -205,14 +209,14 @@ h3 {
 .mini-card {
     width: 44px;
     height: 60px;
-    border: 1px solid #eee;
+    border: 1px solid #333;
     border-radius: 3px;
     font-size: 13px;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
+    background: #111;
     position: relative;
 }
 .mini-card.red { color: var(--card-red); }
@@ -222,12 +226,12 @@ h3 {
     top: -3px; right: -3px;
     width: 8px; height: 8px;
     border-radius: 50%;
-    border: 1.5px solid white;
-    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    border: 1.5px solid #000;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 
-.col-label { font-size: 8px; color: #aaa; text-align: center; text-transform: uppercase; padding-bottom: 2px; }
-.row-label { font-size: 8px; color: #aaa; text-align: right; padding-right: 5px; text-transform: uppercase; }
+.col-label { font-size: 8px; color: #666; text-align: center; text-transform: uppercase; padding-bottom: 2px; }
+.row-label { font-size: 8px; color: #666; text-align: right; padding-right: 5px; text-transform: uppercase; }
 
 /* Interpretation Blocks - Clean text layout */
 .interp-section {
@@ -253,7 +257,7 @@ h3 {
     font-size: 10px;
     font-weight: 800;
     color: white;
-    background: var(--primary);
+    background: var(--card-black);
     padding: 2px 6px;
     border-radius: 3px;
     text-transform: uppercase;
@@ -269,9 +273,15 @@ h3 {
     font-family: 'Helvetica', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    color: var(--primary);
+    color: var(--accent);
 }
 """
+
+CSS = (CSS_TEMPLATE.replace("BACK_COLOR", COLORS["background"])
+                  .replace("GOLD_COLOR", COLORS["secondary"])
+                  .replace("PREM_COLOR", COLORS["premium"])
+                  .replace("TEXT_COLOR", COLORS["text"])
+                  .replace("RED_COLOR", COLORS["accent_warm"]))
 
 def get_card_html(card, role_color=None, is_mini=False):
     if not card: return ""
@@ -333,131 +343,115 @@ def generate_report_html(result):
         return html
 
     now_str = datetime.now().strftime("%B %d, %Y")
-
-    # Group interpretations for clean layout
     pages = []
     
     # --- PAGE 1: Identity & Archetype ---
-    page1 = f"""
-    <div class="page">
-        <div class="subtitle">The Blueprint Report</div>
-        <h1>Birth Archetype: {archetype['birth_card']}</h1>
-        <div class="header-rule"></div>
-        
-        <div class="lead-in">
-            "Your soul chose the signature of the {archetype['birth_card']} to navigate this lifetime—a pattern of {archetype['birth_card_suit_domain'].lower()}."
-        </div>
-
-        <h2>I. Core Identity</h2>
-        <div class="data-row">
-            {get_card_html(archetype['birth_card'])}
-            <div class="paragraph">
-                <strong>{bc_desc.get('t', 'Archetype')}</strong><br>
-                {bc_desc.get('id', '')}
-            </div>
-        </div>
-
-        <div class="data-row">
-            {get_card_html(archetype['planetary_ruling_card'])}
-            <div class="paragraph">
-                <strong>Perception: {prc_desc.get('t', 'Planetary Ruler')}</strong><br>
-                While the {archetype['birth_card']} is your internal engine, others experience you through the lens of the {archetype['planetary_ruling_card']}. This is your professional and social "ruling" presence.
-            </div>
-        </div>
-
-        <h2>II. The Karma Pair</h2>
-        <p class="paragraph">
-            Every lifetime has a specific tension—a challenge card and a supporting strength. This is your permanent "Soul Blueprint."
-        </p>
-        <div class="data-row">
-            <div style="display:flex; gap:10px;">
-                <div style="text-align:center;">
-                    {get_card_html(karma['birth_card']['challenge'])}
-                    <div style="font-size:9px; font-weight:700; margin-top:4px;">CHALLENGE</div>
-                </div>
-                <div style="text-align:center;">
-                    {get_card_html(karma['birth_card']['supporting'])}
-                    <div style="font-size:9px; font-weight:700; margin-top:4px;">SUPPORT</div>
-                </div>
-            </div>
-            <div class="paragraph">
-                Your growth edge lies in mastering the <strong>{karma['birth_card']['challenge']}</strong>. This is where you encounter friction. Conversely, the <strong>{karma['birth_card']['supporting']}</strong> represents a natural talent you can lean on to solve those challenges.
-            </div>
-        </div>
-
-        <h2>III. The Life Path</h2>
-        <p class="paragraph">
-            <strong>The Gateway:</strong> {bc_desc.get('gw', 'Your path is unique.')}
-        </p>
-
-        <div class="footer">
-            <span>Report for {timing['birth_date']}</span>
-            <span>Created {now_str} — Page 1</span>
-        </div>
-    </div>
-    """
-    pages.append(page1)
+    p1 = []
+    p1.append('<div class="page">')
+    p1.append('    <div class="subtitle">The Blueprint Report</div>')
+    p1.append(f'    <h1>Birth Archetype: {archetype["birth_card"]}</h1>')
+    p1.append('    <div class="header-rule"></div>')
+    p1.append('    <div class="lead-in">')
+    p1.append(f'        "Your soul chose the signature of the {archetype["birth_card"]} to navigate this lifetime—a pattern of {archetype["birth_card_suit_domain"].lower()}."')
+    p1.append('    </div>')
+    p1.append('    <h2>I. Core Identity</h2>')
+    p1.append('    <div class="data-row">')
+    p1.append(f'        {get_card_html(archetype["birth_card"])}')
+    p1.append('        <div class="paragraph">')
+    p1.append(f'            <strong>{bc_desc.get("t", "Archetype")}</strong><br>')
+    p1.append(f'            {bc_desc.get("id", "")}')
+    p1.append('        </div>')
+    p1.append('    </div>')
+    p1.append('    <div class="data-row">')
+    p1.append(f'        {get_card_html(archetype["planetary_ruling_card"])}')
+    p1.append('        <div class="paragraph">')
+    p1.append(f'            <strong>Perception: {prc_desc.get("t", "Planetary Ruler")}</strong><br>')
+    p1.append(f'            While the {archetype["birth_card"]} is your internal engine, others experience you through the lens of the {archetype["planetary_ruling_card"]}. ')
+    p1.append('            This is your professional and social "ruling" presence.')
+    p1.append('        </div>')
+    p1.append('    </div>')
+    p1.append('    <h2>II. The Karma Pair</h2>')
+    p1.append('    <p class="paragraph">')
+    p1.append('        Every lifetime has a specific tension—a challenge card and a supporting strength. This is your permanent "Soul Blueprint."')
+    p1.append('    </p>')
+    p1.append('    <div class="data-row">')
+    p1.append('        <div style="display:flex; gap:10px;">')
+    p1.append('            <div style="text-align:center;">')
+    p1.append(f'                {get_card_html(karma["birth_card"]["challenge"])}')
+    p1.append('                <div style="font-size:9px; font-weight:700; margin-top:4px;">CHALLENGE</div>')
+    p1.append('            </div>')
+    p1.append('            <div style="text-align:center;">')
+    p1.append(f'                {get_card_html(karma["birth_card"]["supporting"])}')
+    p1.append('                <div style="font-size:9px; font-weight:700; margin-top:4px;">SUPPORT</div>')
+    p1.append('            </div>')
+    p1.append('        </div>')
+    p1.append('        <div class="paragraph">')
+    p1.append(f'            Your growth edge lies in mastering the <strong>{karma["birth_card"]["challenge"]}</strong>. ')
+    p1.append(f'            The <strong>{karma["birth_card"]["supporting"]}</strong> represents a natural talent you can lean on.')
+    p1.append('        </div>')
+    p1.append('    </div>')
+    p1.append('    <h2>III. The Life Path</h2>')
+    p1.append('    <p class="paragraph">')
+    p1.append(f'        <strong>The Gateway:</strong> {bc_desc.get("gw", "Your path is unique.")}')
+    p1.append('    </p>')
+    p1.append('    <div class="footer">')
+    p1.append(f'        <span>Report for {timing["birth_date"]}</span>')
+    p1.append(f'        <span>Created {now_str} — Page 1</span>')
+    p1.append('    </div>')
+    p1.append('</div>')
+    pages.append("\n".join(p1))
 
     # --- PAGE 2: Current Year ---
-    page2 = f"""
-    <div class="page">
-        <div class="subtitle">The Temporal Report</div>
-        <h1>Yearly Cycle: Age {timing['age']}</h1>
-        <div class="header-rule"></div>
+    p2 = []
+    p2.append('<div class="page">')
+    p2.append('    <div class="subtitle">The Temporal Report</div>')
+    p2.append(f'    <h1>Yearly Cycle: Age {timing["age"]}</h1>')
+    p2.append('    <div class="header-rule"></div>')
+    p2.append('    <p class="paragraph">')
+    p2.append(f'        You are currently in Spread Year {timing["spread_year"]}. This defines the psychological environment from your last birthday to your next.')
+    p2.append('    </p>')
+    p2.append('    <div class="spread-container">')
+    p2.append('        <div style="flex:1;">')
+    p2.append('            <h3>The Yearly Spread</h3>')
+    grid_json = calculate_blueprint._DATA["yearly_spreads"][str(timing["spread_year"])]["grid"]
+    p2.append(f'            {build_grid_html(grid_json)}')
+    p2.append('            <div style="margin-top:15px; font-size:11px; color:var(--text-muted);">')
+    p2.append(f'                <strong>Crown Line:</strong> {", ".join(timing["crown_line"])}')
+    p2.append('            </div>')
+    p2.append('        </div>')
+    p2.append('        <div style="flex:1; padding-left:20px; border-left: 1px solid var(--border);">')
+    p2.append('            <h3>Active Influence</h3>')
+    p2.append(f'            <p class="paragraph" style="font-size:13px;">Currently in your <strong>{active["planet"]}</strong> period.</p>')
+    p2.append('            <div class="data-row" style="margin-bottom:10px;">')
+    p2.append(f'                {get_card_html(active["birth_card_active"])}')
+    p2.append(f'                <div style="font-size:12px;"><strong>Internal: {active["birth_card_active"]}</strong></div>')
+    p2.append('            </div>')
+    p2.append('            <div class="data-row">')
+    p2.append(f'                {get_card_html(active["prc_active"])}')
+    p2.append(f'                <div style="font-size:12px;"><strong>External: {active["prc_active"]}</strong></div>')
+    p2.append('            </div>')
+    p2.append('            <h3>Key Locations</h3>')
+    p2.append('            <ul style="font-size:12px; padding-left:15px;">')
+    p2.append(f'                <li><strong>Environment:</strong> {env_disp["birth_card"]["environment"]}</li>')
+    p2.append(f'                <li><strong>Displacement:</strong> {env_disp["birth_card"]["displacement"]}</li>')
+    p2.append(f'                <li><strong>Long Range:</strong> {lr["birth_card"]["card"]}</li>')
+    p2.append('            </ul>')
+    p2.append('        </div>')
+    p2.append('    </div>')
+    p2.append('    <h2>Yearly Summary</h2>')
+    p2.append('    <p class="paragraph">')
+    p2.append(f'        This year is defined by the <strong>{lr["birth_card"]["card"]}</strong> theme. ')
+    p2.append(f'        Displacing the <strong>{env_disp["birth_card"]["displacement"]}</strong> brings lessons of ')
+    p2.append(f'        {descriptions.get(env_disp["birth_card"]["displacement"], {}).get("t", "experience")}.')
+    p2.append('    </p>')
+    p2.append('    <div class="footer">')
+    p2.append('        <span>Cycle Valid through Birthday</span>')
+    p2.append(f'        <span>Created {now_str} — Page 2</span>')
+    p2.append('    </div>')
+    p2.append('</div>')
+    pages.append("\n".join(p2))
 
-        <p class="paragraph">
-            You are currently in Spread Year {timing['spread_year']}. This cycle defines the people, events, and psychological environment from your last birthday to your next.
-        </p>
-
-        <div class="spread-container">
-            <div style="flex:1;">
-                <h3>The Yearly Spread</h3>
-                {build_grid_html(calculate_blueprint._DATA['yearly_spreads'][str(timing['spread_year'])]['grid'])}
-                <div style="margin-top:15px; font-size:11px; color:var(--text-muted);">
-                    <strong>Crown Line:</strong> 
-                    {timing['crown_line'][0]}, {timing['crown_line'][1]}, {timing['crown_line'][2]}
-                </div>
-            </div>
-            
-            <div style="flex:1; padding-left:20px; border-left: 1px solid var(--border);">
-                <h3>Active Influence</h3>
-                <p class="paragraph" style="font-size:13px;">
-                    You are currently in your <strong>{active['planet']}</strong> period.
-                </p>
-                <div class="data-row" style="margin-bottom:10px;">
-                    {get_card_html(active['birth_card_active'])}
-                    <div style="font-size:12px;"><strong>Internal: {active['birth_card_active']}</strong><br>How you feel.</div>
-                </div>
-                <div class="data-row">
-                    {get_card_html(active['prc_active'])}
-                    <div style="font-size:12px;"><strong>External: {active['prc_active']}</strong><br>How events show up.</div>
-                </div>
-                
-                <h3>Key Locations</h3>
-                <ul style="font-size:12px; padding-left:15px;">
-                    <li><strong>Environment:</strong> {env_disp['birth_card']['environment']} (Home base)</li>
-                    <li><strong>Displacement:</strong> {env_disp['birth_card']['displacement']} (Where you moved)</li>
-                    <li><strong>Long Range:</strong> {lr['birth_card']['card']} (Yearly theme)</li>
-                </ul>
-            </div>
-        </div>
-
-        <h2>Yearly Summary</h2>
-        <p class="paragraph">
-            This year is defined by the <strong>{lr['birth_card']['card']}</strong> as your Long Range influence. 
-            Because you are "displacing" the <strong>{env_disp['birth_card']['displacement']}</strong>, you may feel like a guest in its house, 
-            learning its lessons of {descriptions.get(env_disp['birth_card']['displacement'], {}).get('t', 'experience')}.
-        </p>
-
-        <div class="footer">
-            <span>Cycle Valid through Birthday</span>
-            <span>Created {now_str} — Page 2</span>
-        </div>
-    </div>
-    """
-    pages.append(page2)
-
-    # --- PAGE 3: Interpretations ---
+    # --- PAGE 3+: Interpretations ---
     interp_items = [
         ("Birth Card", archetype["birth_card"], "birth_card", "#feca57"),
         ("Planetary Ruler", archetype["planetary_ruling_card"], "prc", "#54a0ff"),
@@ -475,49 +469,47 @@ def generate_report_html(result):
         ("Result", bc_spread["result"], "result", PLANET_COLORS["Result"]),
     ]
 
-    interp_html = ""
+    interp_html = []
+    interp_html.append('<div class="page">')
+    interp_html.append('    <div class="subtitle">The Interpretations</div>')
+    interp_html.append('    <h1>Analysis & Meanings</h1>')
+    interp_html.append('    <div class="header-rule"></div>')
+    interp_html.append('    <div class="interp-section">')
+
     for i, (label, card, role_key, color) in enumerate(interp_items):
         if not card: continue
         desc = descriptions.get(card, {})
         m = meanings.get(card, {}).get(role_key, "")
         
-        # Split every 7 items to a new page to avoid overflow
         if i > 0 and i % 7 == 0:
-            interp_html += '</div></div><div class="page"><div class="subtitle">The Interpretations</div><h1>Analysis Continued</h1><div class="header-rule"></div><div class="interp-section">'
+            interp_html.append('    </div>')
+            interp_html.append('</div>')
+            interp_html.append('<div class="page">')
+            interp_html.append('    <div class="subtitle">The Interpretations</div>')
+            interp_html.append('    <h1>Analysis Continued</h1>')
+            interp_html.append('    <div class="header-rule"></div>')
+            interp_html.append('    <div class="interp-section">')
 
-        interp_html += f"""
-        <div class="interp-item">
-            <div class="interp-head">
-                <span class="role-tag" style="background: {color};">{label}</span>
-                <span class="item-card-text" style="color: {'var(--card-red)' if get_card_suit(card) in '♥♦' else 'var(--card-black)'}">{card}</span>
-                <span class="item-title">{desc.get('t', '')}</span>
-            </div>
-            <div class="paragraph" style="font-size:13px; margin-bottom:5px;">
-                <strong>Meaning:</strong> {m}
-            </div>
-            <div style="font-size:11px; color:var(--text-muted); font-style:italic;">
-                Archetype: {desc.get('id', '')}
-            </div>
-        </div>
-        """
+        interp_html.append('        <div class="interp-item">')
+        interp_html.append('            <div class="interp-head">')
+        interp_html.append(f'                <span class="role-tag" style="background: {color};">{label}</span>')
+        suit = get_card_suit(card)
+        c_class = 'var(--card-red)' if suit in '♥♦' else 'var(--card-black)'
+        interp_html.append(f'                <span class="item-card-text" style="color: {c_class}">{card}</span>')
+        interp_html.append(f'                <span class="item-title">{desc.get("t", "")}</span>')
+        interp_html.append('            </div>')
+        interp_html.append(f'            <div class="paragraph" style="font-size:13px; margin-bottom:5px;"><strong>Meaning:</strong> {m}</div>')
+        interp_html.append(f'            <div style="font-size:11px; color:var(--text-muted); font-style:italic;">Archetype: {desc.get("id", "")}</div>')
+        interp_html.append('        </div>')
 
-    page3 = f"""
-    <div class="page">
-        <div class="subtitle">The Interpretations</div>
-        <h1>Analysis & Meanings</h1>
-        <div class="header-rule"></div>
-        
-        <div class="interp-section">
-            {interp_html}
-        </div>
-
-        <div class="footer">
-            <span>Archetypal Breakdown</span>
-            <span>Created {now_str} — Page 3+</span>
-        </div>
-    </div>
-    """
-    pages.append(page3)
+    interp_html.append('    </div>')
+    interp_html.append('    <div class="footer">')
+    interp_html.append('        <span>Archetypal Breakdown</span>')
+    interp_html.append(f'        <span>Created {now_str} — Page 3+</span>')
+    interp_html.append('    </div>')
+    interp_html.append('</div>')
+    
+    pages.append("\n".join(interp_html))
 
     return f"<!DOCTYPE html><html><head><meta charset='UTF-8'><style>{CSS}</style></head><body>{''.join(pages)}</body></html>"
 
@@ -638,6 +630,27 @@ def generate_report_markdown(result):
 
     md.append("---\n*End of Report*")
     return "\n".join(md)
+
+# ---------------------------------------------------------------------------
+# API Function
+# ---------------------------------------------------------------------------
+
+def generate_report(bm, bd, by, td=None):
+    if td is None:
+        td = date.today()
+    
+    result = calc_blueprint(bm, bd, by, td)
+    report_html = generate_report_html(result)
+    output_name = f"Birthcard_Report_{bm}_{bd}_{by}.pdf"
+    
+    if HAS_WEASYPRINT:
+        HTML(string=report_html).write_pdf(output_name)
+    else:
+        output_name = output_name.replace(".pdf", ".html")
+        with open(output_name, "w", encoding="utf-8") as f:
+            f.write(report_html)
+    
+    return output_name
 
 # ---------------------------------------------------------------------------
 # Main Execution
