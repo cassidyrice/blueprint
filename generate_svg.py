@@ -9,10 +9,8 @@ from context_engine import engine
 
 
 def estimate_duration(script: str) -> float:
-    """Estimate audio duration from word count (~120 wpm at 0.79 speed)."""
-    words = len(script.split())
-    duration = (words / 120) * 60
-    return max(15.0, min(35.0, duration))
+    """Fixed benchmark for 35-second social media format."""
+    return 35.0
 
 
 def generate_svg(script: str, card: str = "A♣", duration=None) -> str:
@@ -42,12 +40,12 @@ def generate_svg(script: str, card: str = "A♣", duration=None) -> str:
         f"Hero geometry: {geometry}\n"
         f"Palette: matte black #0D0D0D / wine red {suit_accent} / matte white #E8E4DF / metallic gold #C5A059\n\n"
         f"REQUIRED LAYERS (SACRED TECHNICALITY):\n"
-        f"1. ORBITAL SCHEMATICS: Multiple hairlines rotating at varying speeds.\n"
-        f"2. HERO GEOMETRY: {geometry} (Primary anchor).\n"
-        f"3. KINETIC SCANNERS: Horizontal scanning lines implies active calculation.\n"
-        f"4. DATA MICRO-CLUSTERS: Floating technical points/circles near geometry edges.\n"
-        f"5. COMPOSITION: Typography perfectly tracked and positioned (Cinzel/Outfit).\n\n"
-        f"All elements must move with slow, deliberate motion. No static frames.\n"
+        f"1. ORBITAL SCHEMATICS: Multiple hairlines rotating rapidly (10-15s cycles).\n"
+        f"2. HERO GEOMETRY: {geometry} (Bold 2.5px stroke, high-speed drawing entry).\n"
+        f"3. KINETIC SCANNERS: High-velocity scanning lines implies real-time calculation.\n"
+        f"4. DATA MICRO-CLUSTERS: Floating technical points near geometry edges.\n"
+        f"5. COMPOSITION: Bold, heavy-weight typography (Cinzel/Outfit), perfectly centered.\n\n"
+        f"Visual Pacing: Fast, coordinated, and technical. No static elements.\n"
         f"Start directly with <svg"
     )
 

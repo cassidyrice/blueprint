@@ -38,6 +38,11 @@ def get_geometry(card: str) -> str:
     return NUMBER_GEOMETRY.get(num, NUMBER_GEOMETRY[1])
 
 
+def estimate_duration(script: str) -> float:
+    """Target a luxurious 35-second baseline for high-impact social media."""
+    return 35.0
+
+
 def get_suit_accent(card: str) -> str:
     """Brand-compliant suit color via brand_config."""
     color = get_suit_color(card)
@@ -75,9 +80,9 @@ ELEMENT 2: ORBITAL SCHEMATICS
 
 ELEMENT 3: THE HERO GEOMETRY
 - {{geometry}} at canvas center.
-- Stroke: {{suit_accent}}, stroke-width: {DESIGN["stroke_width"]}px.
-- Entry: 'Draw-in' (stroke-dashoffset) over 6s.
-- Continuous slow rotation (0.2deg/s).
+- Stroke: {{suit_accent}}, stroke-width: 2.5px (enhanced bold profile).
+- Entry: 'Draw-in' (stroke-dashoffset) over 3s (high-velocity entry).
+- Continuous slow rotation (0.8deg/s).
 
 ELEMENT 4: KINETIC SCANNERS
 - Two horizontal gold hairlines (X: 100 to 980) that scan vertically from Y=600 to Y=1360.
@@ -120,16 +125,15 @@ The result must look like a high-end luxury brand reveal — cold, expensive, an
 """
 
 
-# ---------------------------------------------------------------------------
 # SCRIPT PROMPT TEMPLATES
 # Brand tone: Robert Greene — strategic, philosophical, direct, no fluff
-# Word count: {TONE["target_word_count"]}
+# Word count: Target 75-85 words for a 35-second reading.
 # Forbidden: {TONE["forbidden_words"]}
 # ---------------------------------------------------------------------------
 
 _TONE_RULES = f"""
 Tone: {TONE["style"]} — write like {TONE["voice"]}.
-Word count: {TONE["target_word_count"][0]}–{TONE["target_word_count"][1]} words exactly.
+Word count: 75–85 words exactly (essential for 35s pacing).
 Forbidden words: {", ".join(TONE["forbidden_words"])} — never use these.
 - Second person. Direct. No hedging. No filler.
 - Short declarative sentences. Each one lands.
