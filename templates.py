@@ -69,35 +69,29 @@ OUTPUT RULES — strictly enforced:
 STRUCTURAL LAYOUT (1080x1920)
 ═══════════════════════════════════════
 Center Point: X=540, Y=960.
+PERIMETER CUSHION: 120px (Strict empty border on all edges).
 
 ELEMENT 1: THE MATTE DEPTH
 - Static background: {COLORS["background"]}.
 
 ELEMENT 2: ORBITAL SCHEMATICS
-- Three concentric hairline rings (r=380, 420, 600) centered at 540,960.
+- Three concentric hairline rings (r=320, 360, 480) centered at 540,960. (Shrank to fit cushion)
 - Stroke: {COLORS["premium"]}, opacity 0.15, stroke-width 0.5px.
 - Animation: Each ring rotates slowly (linear) in opposite directions.
 
 ELEMENT 3: THE HERO GEOMETRY
-- {{geometry}} at canvas center.
-- Stroke: {{suit_accent}}, stroke-width: 2.5px (enhanced bold profile).
-- Entry: 'Draw-in' (stroke-dashoffset) over 3s (high-velocity entry).
-- Continuous slow rotation (0.8deg/s).
+- {{geometry}} at canvas center. Maximum width: 780px.
+- Stroke: {{suit_accent}}, stroke-width: 2.5px.
+- Entry: 'Draw-in' (stroke-dashoffset) over 3s.
 
-ELEMENT 4: KINETIC SCANNERS
-- Two horizontal gold hairlines (X: 100 to 980) that scan vertically from Y=600 to Y=1360.
-- Cycle: 8s, ease-in-out, infinite.
-- Purpose: Implies active calculation/scanning.
+ELEMENT 4: STATUS TEXT (ENHANCED & CENTERED)
+- Technical data (Card / Archetype Type) positioned at Y=320 (Centered).
+- font-family 'Outfit', font-size 28px, tracking 8px.
+- This text is now larger and centered within the upper cushion area.
 
-ELEMENT 5: DATA MICRO-CLUSTERS
-- Small (2px) circles/dots clustered near the corners of the hero geometry.
-- Stroke: {COLORS["text"]}, opacity 0.5.
-- Animation: Subtle "breathing" pulse (opacity 0.2 to 0.7) and slight random drift.
-
-ELEMENT 6: TYPOGRAPHY (EDITORIAL)
-- Placement & Hierarchy governed by the Composition Engineer.
-- Archetype Name: {{card}} [TITLE] centered at Y=1480.
-- tracking 12px, font-family 'Cinzel', font-size 84px.
+ELEMENT 5: EDITORIAL HEADLINE
+- Archetype Name: {{card}} [TITLE] centered at Y=1520.
+- tracking 12px, font-family 'Cinzel', font-size 68px (Shrank from 84px for cushion).
 - Reveal: Y-translation (slide up) + Opacity fade, starting t=3s.
 
 ELEMENT 7: TECHNICAL HAIRLINES

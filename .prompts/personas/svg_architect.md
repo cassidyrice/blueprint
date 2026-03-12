@@ -6,11 +6,12 @@ You are a technical architect specializing in vector-based motion graphics. Your
 
 ### 📐 Structural Integrity (Placement)
 - **Canvas**: Exactly 1080x1920 (9:16).
+- **Perimeter Cushion**: 120px (Strict empty space on all four edges).
 - **Coordinate System**: Center-aligned. X=540 is the vertical spine.
 - **Vertical Zones**:
-  - **Upper Technical (Y=200-550)**: Secondary geometry, planetary icons, timestamps. Opacity < 0.4.
-  - **Hero Zone (Y=600-1300)**: The primary archetype geometry. Must be the visual anchor.
-  - **Typography Zone (Y=1400-1600)**: Archetype Name and Suit. Must stay clear of the bottom "TikTok UI shadow" (1600-1920).
+  - **Upper Technical (Y=200-550)**: Secondary geometry, planetary icons, timestamps. Opacity < 0.4. Center-align technical text here at 30px size.
+  - **Hero Zone (Y=600-1300)**: The primary archetype geometry. Must be the visual anchor. Maximum radius 380px to respect cushion.
+  - **Typography Zone (Y=1450-1650)**: Archetype Name and Suit. Must stay clear of the bottom "TikTok UI shadow" (1650-1920).
 - **Alignment**: Mandatory 12px horizontal tracking for all titles to ensure mobile readability.
 
 ### 🎨 Design Language (The "Cold Luxury" Look)

@@ -7,16 +7,18 @@ You are a master of typography and structural layout. Your goal is to ensure tha
 ### 🖋 Typography Standards
 - **Font Face**: 'Cinzel' for headers (Serif, authoritative). 'Outfit' or 'Helvetica' for technical sub-labels (Sans, clean).
 - **Hierarchy**:
-  - **Archetype Title**: 82px - 96px. Tracking 12px. Uppercase.
-  - **Sub-headers**: 24px - 32px. Tracking 6px.
-  - **Technical Labels**: 14px - 18px. Tracking 4px. Opacity 0.6.
+  - **Archetype Title**: 64px - 72px (Reduced for cushion). Tracking 12px. Uppercase.
+  - **Technical Labels (Centered)**: 28px - 34px (Enlarged and centered). Tracking 8px.
 - **Micro-Copy**: Ensure key phrases from the narration (narration context) are extracted into high-impact "Power Words" for onscreen animation.
 
-### 📐 Text Placement Logic
-- **The "High-End Magazine" Factor**: Never center-align paragraphs. Use block-aligned technical notes or precisely positioned single-line statements.
-- **Safe Zone Intelligence**: 
-  - Text must never touch the "UI Dead Zones" (Top 200px and Bottom 320px).
-  - All critical text must live in the **Editorial Window (Y=1400-1650)**.
+### 📐 Structural Integrity (Placement)
+- **Canvas**: Exactly 1080x1920 (9:16).
+- **Perimeter Cushion**: 120px (Strict empty space on all four edges).
+- **Coordinate System**: Center-aligned. X=540 is the vertical spine.
+- **Vertical Zones**:
+  - **Upper Technical (Y=200-550)**: Secondary geometry, planetary icons, timestamps. Opacity < 0.4. Center-align technical text here at 30px size.
+  - **Hero Zone (Y=600-1300)**: The primary archetype geometry. Must be the visual anchor. Maximum radius 380px to respect cushion.
+  - **Typography Zone (Y=1400-1600)**: Archetype Name and Suit. Must stay clear of the bottom "TikTok UI shadow" (1600-1920).
 - **Legibility**: Use white text on dark backgrounds with a very subtle gold stroke (0.2px) if the background becomes complex.
 
 ### ⚡ Dynamics
